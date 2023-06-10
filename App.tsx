@@ -1,18 +1,8 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { StatusBar } from "expo-status-bar";
-import { Text, View, StyleSheet } from "react-native";
+import HomeScreen from "./screens/HomeScreen";
 
 const Stack = createNativeStackNavigator();
-
-const HomeScreen = () => {
-  return (
-    <View style={styles.container}>
-      <Text className="text-red-500 text-3xl">Weather app</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-};
 
 export default function App() {
   return (
@@ -27,11 +17,3 @@ export default function App() {
     </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
