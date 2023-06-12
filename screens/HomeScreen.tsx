@@ -1,17 +1,40 @@
-import { Text, SafeAreaView, View, Image, Pressable } from "react-native";
-import { StatusBar } from "expo-status-bar";
-import { useState } from "react";
-import BackgroundImage from "../assets/images/clouds_background.webp";
-import WADismissKeyboard from "../components/common/WADismissKeyboard";
-import SearchBar from "../components/SearchBar";
-import { FontAwesome } from "@expo/vector-icons";
-import FoggySun from "../assets/icons/Foggy_Sun.png";
+import {
+  Text,
+  SafeAreaView,
+  View,
+  Image,
+  Pressable,
+  ScrollView,
+  FlatList,
+  TouchableOpacity,
+} from 'react-native';
+import { StatusBar } from 'expo-status-bar';
+import { useState } from 'react';
+import BackgroundImage from '../assets/images/clouds_background.webp';
+import WADismissKeyboard from '../components/common/WADismissKeyboard';
+import SearchBar from '../components/SearchBar';
+import { FontAwesome } from '@expo/vector-icons';
+import FoggySun from '../assets/icons/Foggy_Sun.png';
+import StatisticsSection from '../components/StatisticsSection';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import ForecastItem from '../components/ForecastItem';
+import { Days } from '../Days';
+import { DayForecast } from '../interfaces/DayForecast';
 
 const HomeScreen = () => {
   const [locations, setLocations] = useState<any[]>([
-    "United Kingdom",
-    "Turkey",
-    "Canada",
+    'United Kingdom',
+    'Turkey',
+    'Canada',
+  ]);
+  const [days, setDays] = useState<DayForecast[]>([
+    { day: Days.Monday, temperature: 11 },
+    { day: Days.Tuesday, temperature: 23 },
+    { day: Days.Wednesday, temperature: 19 },
+    { day: Days.Thursday, temperature: 32 },
+    { day: Days.Friday, temperature: 17 },
+    { day: Days.Saturday, temperature: 25 },
+    { day: Days.Sunday, temperature: 36 },
   ]);
 
   const [isInputVisible, setIsInputVisible] = useState<boolean>(false);
@@ -41,8 +64,7 @@ const HomeScreen = () => {
                 {locations.map((location, index) => (
                   <Pressable
                     key={index}
-                    className="mb-1  py-2 px-4 flex-row items-center space-x-3 "
-                  >
+                    className="mb-1  py-2 px-4 flex-row items-center space-x-3 ">
                     <FontAwesome
                       name="location-arrow"
                       size={24}
@@ -69,6 +91,32 @@ const HomeScreen = () => {
               <Text className="text-white text-center text-xl">
                 Partly cloudy !
               </Text>
+            </View>
+            <StatisticsSection />
+            <View className="space-y-2 mx-6">
+              <View className="space-x-2 flex-row items-center">
+                <MaterialCommunityIcons
+                  name="calendar-month-outline"
+                  size={24}
+                  color="white"
+                />
+                <Text className="text-white">Daily forecast</Text>
+              </View>
+              <ScrollView
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}>
+                <View
+                  className="flex-row flex flex-1"
+                  style={{ gap: 10 }}
+                  onStartShouldSetResponder={() => true}>
+                  {days.map((item) => (
+                    <ForecastItem
+                      day={item.day}
+                      temperature={item.temperature}
+                    />
+                  ))}
+                </View>
+              </ScrollView>
             </View>
           </View>
         </SafeAreaView>
