@@ -1,11 +1,15 @@
 import { View, TextInput, Pressable, Animated, Easing } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
-const SearchBar = () => {
+interface SearchBarProps {
+  toggleInput: () => void;
+  inputVisible: boolean;
+}
+
+const SearchBar: React.FC<SearchBarProps> = ({ toggleInput, inputVisible }) => {
   const [input, setInput] = useState("");
   const width = useRef(new Animated.Value(0)).current;
-  const [inputExpanded, setInputExpanded] = useState(false);
 
   const widthAnim = width.interpolate({
     inputRange: [0, 1],
@@ -14,12 +18,12 @@ const SearchBar = () => {
 
   const toggleSearch = () => {
     Animated.timing(width, {
-      toValue: !inputExpanded ? 1 : 0,
+      toValue: !inputVisible ? 1 : 0,
       duration: 300,
       useNativeDriver: false,
     }).start();
 
-    setInputExpanded((inputExpanded) => !inputExpanded);
+    toggleInput();
   };
 
   const barWidth = { width: widthAnim };
