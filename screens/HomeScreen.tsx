@@ -5,11 +5,9 @@ import {
   Image,
   Pressable,
   ScrollView,
-  FlatList,
-  TouchableOpacity,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import BackgroundImage from '../assets/images/clouds_background.webp';
 import WADismissKeyboard from '../components/common/WADismissKeyboard';
 import SearchBar from '../components/SearchBar';
@@ -22,11 +20,8 @@ import { Days } from '../Days';
 import { DayForecast } from '../interfaces/DayForecast';
 
 const HomeScreen = () => {
-  const [locations, setLocations] = useState<any[]>([
-    'United Kingdom',
-    'Turkey',
-    'Canada',
-  ]);
+  const [locations, setLocations] = useState<any[]>([]);
+
   const [days, setDays] = useState<DayForecast[]>([
     { day: Days.Monday, temperature: 11 },
     { day: Days.Tuesday, temperature: 23 },
@@ -43,6 +38,15 @@ const HomeScreen = () => {
     setIsInputVisible(!isInputVisible);
   };
 
+  const updateLocations = (locations: any[]) => {
+    const results = locations.map((item) => ({
+      country: item.country,
+      city: item.name,
+    }));
+
+    setLocations(results);
+  };
+
   return (
     <WADismissKeyboard>
       <View className="flex-1 relative">
@@ -56,6 +60,7 @@ const HomeScreen = () => {
         <SafeAreaView className="flex flex-1">
           <View className="px-4 items-end h-12">
             <SearchBar
+              updateLocations={updateLocations}
               toggleInput={toggleInput}
               inputVisible={isInputVisible}
             />
@@ -70,7 +75,9 @@ const HomeScreen = () => {
                       size={24}
                       color="black"
                     />
-                    <Text className="text-lg">{location}</Text>
+                    <Text className="text-lg">
+                      {location.country}, {location.city}
+                    </Text>
                   </Pressable>
                 ))}
               </View>
@@ -109,8 +116,9 @@ const HomeScreen = () => {
                   className="flex-row flex flex-1"
                   style={{ gap: 10 }}
                   onStartShouldSetResponder={() => true}>
-                  {days.map((item) => (
+                  {days.map((item, key) => (
                     <ForecastItem
+                      key={key}
                       day={item.day}
                       temperature={item.temperature}
                     />

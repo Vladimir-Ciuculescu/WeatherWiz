@@ -1,19 +1,26 @@
-import { View, TextInput, Pressable, Animated, Easing } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { View, TextInput, Pressable, Animated } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
+import { getLocation } from '../api/weather';
+import { debounce } from 'lodash';
 
 interface SearchBarProps {
   toggleInput: () => void;
   inputVisible: boolean;
+  updateLocations: (e: any[]) => void;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ toggleInput, inputVisible }) => {
-  const [input, setInput] = useState("");
+const SearchBar: React.FC<SearchBarProps> = ({
+  toggleInput,
+  inputVisible,
+  updateLocations,
+}) => {
+  const [input, setInput] = useState('');
   const width = useRef(new Animated.Value(0)).current;
 
   const widthAnim = width.interpolate({
     inputRange: [0, 1],
-    outputRange: ["12%", "100%"],
+    outputRange: ['12%', '100%'],
   });
 
   const toggleSearch = () => {
@@ -26,25 +33,37 @@ const SearchBar: React.FC<SearchBarProps> = ({ toggleInput, inputVisible }) => {
     toggleInput();
   };
 
+  const searchLocation = async (location: string) => {
+    if (location.length > 2) {
+      const data = await getLocation(location);
+      updateLocations(data);
+    }
+  };
+
+  const handleDebounce = useCallback(debounce(searchLocation, 1200), []);
+
+  const handleInput = (e: string) => {
+    setInput(e);
+    handleDebounce(e);
+  };
+
   const barWidth = { width: widthAnim };
 
   return (
     <Animated.View
       className="rounded-full bg-slate-600 flex flex-row items-center justify-end h-full"
-      style={[barWidth]}
-    >
+      style={[barWidth]}>
       <TextInput
         placeholder="Search country"
         value={input}
-        onChangeText={setInput}
+        onChangeText={handleInput}
         className={`text-white h-10 pl-0 ml-5 flex-1`}
         selectionColor="white"
         placeholderTextColor="white"
       />
       <Pressable
         onPress={toggleSearch}
-        className="bg-slate-300 rounded-full mx-1 p-2"
-      >
+        className="bg-slate-300 rounded-full mx-1 p-2">
         <AntDesign name="search1" size={22} color="black" />
       </Pressable>
     </Animated.View>
