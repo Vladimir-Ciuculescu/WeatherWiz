@@ -1,9 +1,6 @@
 import { APP_KEY } from '@env';
 import axios from 'axios';
 
-let city = 'ceva';
-let days = 7;
-
 export const getForecast = async (city: string, days: number) => {
   try {
     const response = await axios.request({

@@ -12,8 +12,6 @@ const StatisticsSection: React.FC<StatisticsSectionProps> = ({
   time,
   humidity,
 }) => {
-  console.log(time);
-
   const date = new Date(time);
   const currentTime = date.toLocaleTimeString([], {
     hour: '2-digit',

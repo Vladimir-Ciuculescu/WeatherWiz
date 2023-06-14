@@ -13,12 +13,17 @@ import { getForecast, getLocation } from '../api/weather';
 import { debounce } from 'lodash';
 import { FontAwesome } from '@expo/vector-icons';
 import { DAYS } from '../consts';
+import { storeLocation } from '../asyncStorage';
 
 interface SearchSectionProps {
   setWeather: (e: any) => void;
+  handleLoading: (e: boolean) => void;
 }
 
-const SearchSection: React.FC<SearchSectionProps> = ({ setWeather }) => {
+const SearchSection: React.FC<SearchSectionProps> = ({
+  setWeather,
+  handleLoading,
+}) => {
   const [input, setInput] = useState('');
   const width = useRef(new Animated.Value(0)).current;
   const [locations, setLocations] = useState<any[]>([]);
@@ -69,7 +74,10 @@ const SearchSection: React.FC<SearchSectionProps> = ({ setWeather }) => {
   const barWidth = { width: widthAnim };
 
   const getLocationForecast = async (city: string) => {
+    handleLoading(true);
     const data = await getForecast(city, DAYS);
+    await storeLocation(data?.location?.name);
+    handleLoading(false);
     setWeather(data);
     setInputVisible(false);
     Keyboard.dismiss();
