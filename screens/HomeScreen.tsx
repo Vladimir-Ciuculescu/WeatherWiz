@@ -3,7 +3,6 @@ import { StatusBar } from 'expo-status-bar';
 import { useState, useEffect } from 'react';
 import BackgroundImage from '../assets/images/clouds_background.webp';
 import WADismissKeyboard from '../components/common/WADismissKeyboard';
-import FoggySun from '../assets/icons/Foggy_Sun.png';
 import StatisticsSection from '../components/StatisticsSection';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import ForecastItem from '../components/ForecastItem';
@@ -11,6 +10,7 @@ import { getForecast } from '../api/weather';
 import { Days } from '../interfaces/Days';
 import SearchSection from '../components/SearchSection';
 import { DAYS } from '../consts';
+import { weatherIcons } from '../assets/icons';
 
 const HomeScreen = () => {
   const [weather, setWeather] = useState<any>({});
@@ -48,14 +48,17 @@ const HomeScreen = () => {
               </Text>
             </View>
             <View className="flex-row justify-center">
-              <Image source={FoggySun} className="w-52 h-52" />
+              <Image
+                source={weatherIcons[current?.condition.text]}
+                className="w-52 h-52"
+              />
             </View>
             <View className="space-y-2">
               <Text className="text-white text-center text-6xl">
                 {current?.temp_c}&#176;
               </Text>
               <Text className="text-white text-center text-xl">
-                Partly cloudy !
+                {current?.condition.text}
               </Text>
             </View>
             <StatisticsSection
@@ -91,6 +94,7 @@ const HomeScreen = () => {
                           key={key}
                           day={day}
                           temperature={item.day.avgtemp_c}
+                          condition={item.day.condition.text}
                         />
                       );
                     },

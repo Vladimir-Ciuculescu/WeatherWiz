@@ -12,6 +12,15 @@ const StatisticsSection: React.FC<StatisticsSectionProps> = ({
   time,
   humidity,
 }) => {
+  console.log(time);
+
+  const date = new Date(time);
+  const currentTime = date.toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true,
+  });
+
   return (
     <View className="flex-row justify-between mx-4">
       <View className="flex-row items-center space-x-2">
@@ -21,7 +30,7 @@ const StatisticsSection: React.FC<StatisticsSectionProps> = ({
       <View className="flex-row items-center space-x-2">
         <Ionicons name="sunny-outline" size={24} color="white" />
 
-        <Text className="text-white font-semibold">{time} PM</Text>
+        <Text className="text-white font-semibold">{currentTime}</Text>
       </View>
       <View className="flex-row items-center space-x-2">
         <SimpleLineIcons name="drop" size={24} color="white" />
