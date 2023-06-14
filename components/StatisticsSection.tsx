@@ -1,21 +1,31 @@
-import { View, Text } from "react-native";
-import { Feather, Ionicons, SimpleLineIcons } from "@expo/vector-icons";
+import { View, Text } from 'react-native';
+import { Feather, Ionicons, SimpleLineIcons } from '@expo/vector-icons';
 
-const StatisticsSection: React.FC<any> = () => {
+interface StatisticsSectionProps {
+  wind: number;
+  time: any;
+  humidity: number;
+}
+
+const StatisticsSection: React.FC<StatisticsSectionProps> = ({
+  wind,
+  time,
+  humidity,
+}) => {
   return (
     <View className="flex-row justify-between mx-4">
       <View className="flex-row items-center space-x-2">
         <Feather name="wind" size={24} color="white" />
-        <Text className="text-white font-semibold">22 km</Text>
+        <Text className="text-white font-semibold">{wind} km</Text>
       </View>
       <View className="flex-row items-center space-x-2">
         <Ionicons name="sunny-outline" size={24} color="white" />
 
-        <Text className="text-white font-semibold">14:56 PM</Text>
+        <Text className="text-white font-semibold">{time} PM</Text>
       </View>
       <View className="flex-row items-center space-x-2">
         <SimpleLineIcons name="drop" size={24} color="white" />
-        <Text className="text-white font-semibold">26%</Text>
+        <Text className="text-white font-semibold">{humidity}%</Text>
       </View>
     </View>
   );

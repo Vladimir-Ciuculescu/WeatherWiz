@@ -1,4 +1,4 @@
-import { Days } from '../Days';
+import { Days } from './Days';
 
 export interface DayForecast {
   day: Days;
